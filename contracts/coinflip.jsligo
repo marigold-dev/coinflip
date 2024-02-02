@@ -1,0 +1,22 @@
+
+type storage = {
+level : nat, 
+chest : chest,
+guess : bytes, 
+result : bytes
+};
+
+@entry
+const initialize_game = (chest : chest , s : storage) : [list<operation>,storage] => {
+    return [list([]),s];
+}
+
+@entry
+const guess = (raw : bytes , s : storage) : [list<operation>,storage] => {
+    return [list([]),s];
+}
+
+@entry
+const finish_game = (ckey : chest_key, s : storage)  : [list<operation>,storage] => {
+    return [list([]),s];
+}
