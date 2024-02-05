@@ -1,6 +1,9 @@
 #import "coinflip.jsligo" "Contract"
 
-// When this file was created, the smart contract was defined with an entrypoint using `@entry` that was not within a namespace. As such, the examples below are written with that assumption in mind.
+const [chest, ckey] = Test.create_chest(Bytes.pack(Head()), Tezos.get_level());
 
-// IMPORTANT: We suggest always explicitly typing your parameter values:
-// E.g.: `const parameter: int = 10` or `const parameter: Contract.parameter = 10`
+const init: parameter_of Contract = Initialize_game(chest);
+
+const guess: parameter_of Contract = Guess(Bytes.pack(Head()));
+
+const finish: parameter_of Contract = Finish_game(ckey);

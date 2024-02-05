@@ -1,22 +1,28 @@
+export type coin_side = ["Head"] | ["Tail"];
 
-type storage = {
-level : nat, 
-chest : chest,
-guess : bytes, 
-result : bytes
-};
+export type storage = { level: nat, chest: chest, guess: bytes, result: bool };
 
 @entry
-const initialize_game = (chest : chest , s : storage) : [list<operation>,storage] => {
-    return [list([]),s];
+const initialize_game = (chest: chest, s: storage): [list<operation>, storage] => {
+    return [list([]), { ...s, chest, level: Tezos.get_level() }];
 }
 
 @entry
-const guess = (raw : bytes , s : storage) : [list<operation>,storage] => {
-    return [list([]),s];
+const guess = (guess: bytes, s: storage): [list<operation>, storage] => {
+    if (s.level + 10n > Tezos.get_level()) return [list([]), { ...s, guess }]; else return [
+        list([]),
+        s
+    ];
 }
 
 @entry
-const finish_game = (ckey : chest_key, s : storage)  : [list<operation>,storage] => {
-    return [list([]),s];
+const finish_game = (ckey: chest_key, s: storage): [list<operation>, storage] => {
+    const secretOpt: option<bytes> =
+        Tezos.open_chest(ckey, s.chest, Tezos.get_level());
+    return match(secretOpt) {
+        when (None()):
+            failwith("Wrong key ! Try again")
+        when (Some(secret)):
+            [list([]), { ...s, result: secret == s.guess }]
+    };
 }
