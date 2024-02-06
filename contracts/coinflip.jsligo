@@ -2,14 +2,9 @@ export type coin_side = ["Head"] | ["Tail"];
 
 export type storage = { level: nat, chest: chest, guess: bytes, result: bool };
 
-
-
 @entry
 const guess = (guess: bytes, s: storage): [list<operation>, storage] => {
-    if (s.level + 10n > Tezos.get_level()) return [list([]), { ...s, guess }]; else return [
-        list([]),
-        s
-    ];
+    return [list([]), { ...s, guess }]; 
 }
 
 @entry

@@ -1,11 +1,11 @@
 #import "./coinflip.jsligo" "Contract"
 
-
-
-
 //const _ = Test.bake_until_n_cycle_end(1n); 
 
-const level = 10000000n; //Tezos.get_level();
+const level = 3_000_000n; //Tezos.get_level();
+
+//3_000_000n for my laptop(XPS 15 i7-11800 @2.3GHz 35GB RAM) 15s block running this Ligo Test Framework test
+//600_000_000n for FPGA (AWS F1) 15s block
 
 const _1 =  Test.log(["level", level]);
 
@@ -33,22 +33,14 @@ const guess = (side : Contract.coin_side): bool => {
 
 
 const finish_game = (): bool => {
-
-
-   const newcKey = Test.create_chest_key(chest,level);
-
-
-
-    let status = Test.transfer(addr, (Finish_game(newcKey)), 0mutez);
+  const newcKey = Test.create_chest_key(chest,level);
+  let status = Test.transfer(addr, (Finish_game(newcKey)), 0mutez);
   Test.log(["status", status]);
   const store =Test.get_storage(addr);
    Test.log(["storage",store]);
    Test.assert_with_error(store.result ,"Did not guessed well the coin, sorry");
   return store.result;
 };
-
-
-
 
 
 const test_guess = guess(Head());
