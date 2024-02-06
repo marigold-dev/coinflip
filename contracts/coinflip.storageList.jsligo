@@ -3,6 +3,6 @@
 const storage: Contract.storage = {
     chest: Test.create_chest(Bytes.pack(unit), Tezos.get_level())[0],
     guess: bytes ``,
-    level: 1n,
+    level: 0n,
     result: false,
 };

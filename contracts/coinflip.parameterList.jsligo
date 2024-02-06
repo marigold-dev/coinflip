@@ -1,9 +1,12 @@
 #import "coinflip.jsligo" "Contract"
 
-const [chest, ckey] = Test.create_chest(Bytes.pack(Head()), Tezos.get_level());
+const level = Tezos.get_level();
+
+const [chest, ckey] = Test.create_chest(Bytes.pack(Head()), level);
 
 const init: parameter_of Contract = Initialize_game(chest);
 
 const guess: parameter_of Contract = Guess(Bytes.pack(Head()));
 
-const finish: parameter_of Contract = Finish_game(ckey);
+const finish: parameter_of Contract =
+    Finish_game(Test.create_chest_key(chest, level));

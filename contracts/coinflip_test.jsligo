@@ -1,0 +1,55 @@
+#import "./coinflip.jsligo" "Contract"
+
+
+
+
+//const _ = Test.bake_until_n_cycle_end(1n); 
+
+const level = 10000000n; //Tezos.get_level();
+
+const _1 =  Test.log(["level", level]);
+
+
+const [chest,ckey] =  Test.create_chest(Bytes.pack(Head()),level );
+
+const initial_storage: Contract.storage = {
+    chest,
+    guess: bytes ``,
+    level,
+    result: false,
+};
+
+  const  {addr , code , size} = Test.originate(contract_of(Contract), initial_storage, 0tez);
+
+const guess = (side : Contract.coin_side): bool => {
+    
+ Test.log(["current level", Tezos.get_level()]);
+
+  let status = Test.transfer(addr, (Guess(Bytes.pack(side))), 0mutez);
+  Test.log(["status", status]);
+   Test.log(["storage",Test.get_storage(addr)]);
+  return true;
+};
+
+
+const finish_game = (): bool => {
+
+
+   const newcKey = Test.create_chest_key(chest,level);
+
+
+
+    let status = Test.transfer(addr, (Finish_game(newcKey)), 0mutez);
+  Test.log(["status", status]);
+  const store =Test.get_storage(addr);
+   Test.log(["storage",store]);
+   Test.assert_with_error(store.result ,"Did not guessed well the coin, sorry");
+  return store.result;
+};
+
+
+
+
+
+const test_guess = guess(Head());
+const test_finish_game = finish_game();
