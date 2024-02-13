@@ -1,16 +1,24 @@
 export type coin_side = ["Head"] | ["Tail"];
 
-export type storage = { level: nat, chest: chest, guess: bytes, result: bool };
+export type storage = { 
+    nbBlockDifficulty: nat,
+    difficultyPerBlock : nat, 
+    chest: chest, 
+    guess: bytes, 
+    result: bool , 
+    startBlock : nat 
+};
 
 @entry
 const guess = (guess: bytes, s: storage): [list<operation>, storage] => {
-    return [list([]), { ...s, guess }]; 
+    if (s.nbBlockDifficulty + s.startBlock > Tezos.get_level()) return [list([]), { ...s, guess }]; 
+    else failwith("Too late to submit a guess");
 }
 
 @entry
 const finish_game = (ckey: chest_key, s: storage): [list<operation>, storage] => {
     const secretOpt: option<bytes> =
-        Tezos.open_chest(ckey, s.chest, s.level);
+        Tezos.open_chest(ckey, s.chest, s.nbBlockDifficulty * s.difficultyPerBlock);
     return match(secretOpt) {
         when (None()):
             failwith("Wrong key ! Try again")

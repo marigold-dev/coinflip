@@ -1,8 +1,8 @@
 #import "coinflip.jsligo" "Contract"
 
-const storage: Contract.storage = {
+/*const storage: Contract.storage = {
     chest: Test.create_chest(Bytes.pack(unit), Tezos.get_level())[0],
     guess: bytes ``,
     level: 0n,
     result: false,
-};
+};*/
